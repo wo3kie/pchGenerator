@@ -1,11 +1,13 @@
-from pch import\
-    parseLine
-
-# pchGenerator
-
 import unittest
 
-class TestParseLine(unittest.TestCase):
+from pch import\
+    parseLine,\
+    Stack
+
+#
+# parseLine
+#
+class TestParseLine( unittest.TestCase ):
     def test_negative( self ):
         self.assertRaises( Exception, parseLine, "line" )
         self.assertRaises( Exception, parseLine, ". " )
@@ -17,6 +19,7 @@ class TestParseLine(unittest.TestCase):
         self.assertEqual( parseLine( ".. directory" ), ( 2, "directory" ) )
         self.assertEqual( parseLine( "... path" ), ( 3, "path" ) )
 
+        
 #
 # main
 #
