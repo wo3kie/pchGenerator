@@ -53,13 +53,8 @@ def runApplication():
 
         dag.add( depth, file )
 
-
-
 #
 # main
 #
 if __name__ == "__main__":
-    if len( sys.argv ) == 1:
-        unittest.main()
-    else:
-        runApplication()
+    runApplication()
