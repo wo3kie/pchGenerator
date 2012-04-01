@@ -8,7 +8,7 @@ from headers_dag import\
     HeadersDag
 
 #
-# DagNode
+# TestDagNode
 #
 class TestDagNode( unittest.TestCase ):
     def test_init( self ):
@@ -41,6 +41,9 @@ class TestDagNode( unittest.TestCase ):
         node.setCounter( 2 )
         self.assertEqual( node.getCounter(), 2 )
 
+#
+# TestDagHeaders
+#
 class TestDagHeaders( unittest.TestCase ):
     def test_processOneFile( self ):
         # . A
@@ -75,7 +78,7 @@ class TestDagHeaders( unittest.TestCase ):
         nodeD = headers.add( 2, "D" )
 
         headers.processOneFile()
-        
+
         self.assertFalse( nodeA.isIncluded() )
         self.assertFalse( nodeB.isIncluded() )
         self.assertFalse( nodeC.isIncluded() )

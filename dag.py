@@ -47,18 +47,6 @@ class DagNode( DfsNode ):
         self._parents = set()
         self._children = set()
 
-    def __eq__( self, other ):
-        return self.getData() == other.getData()
-
-    def __hash__( self ):
-        return self._data.__hash__()
-
-    def deepPrint( self, indent = 0 ):
-        print( indent * ' ', self._data )
-
-        for child in self.getChildren():
-            child.deepPrint( indent + 1 )
-
     def getData( self ):
         return self._data
 
@@ -79,7 +67,7 @@ class DagNode( DfsNode ):
 
     def isRoot( self ):
         return len( self.getParents() ) == 0
-        
+
     def isLeaf( self ):
         return len( self.getChildren() ) == 0
 
@@ -91,6 +79,18 @@ class DagNode( DfsNode ):
 
         for child in self.getChildren():
             child.setColorRecursively( color )
+
+    def deepPrint( self, indent = 0 ):
+        print( indent * ' ', self._data )
+
+        for child in self.getChildren():
+            child.deepPrint( indent + 1 )
+
+    def __eq__( self, other ):
+        return self.getData() == other.getData()
+
+    def __hash__( self ):
+        return self._data.__hash__()
 
 from stack import Stack
 
@@ -106,6 +106,52 @@ class Dag:
 
         self._root = self._stack.top()
 
+    def createNode( self, value ):
+        return DagNode( value )
+
+    def add( self, depth, object ):
+        assert depth > 0, 'depth cant be less equal zero'
+
+        if depth > self.__getDepth() + 1:
+            raise Exception( "Wrong depth, stack: ", self.__getDepth(), ", depth: ", depth )
+
+        depthDifference = self.__getDepth() - depth + 1
+
+        for i in range( 0, depthDifference ):
+            self._stack.pop()
+
+        assert self._stack.empty() == False, 'stack cant be empty'
+
+        header = self.__getOrCreate( object )
+
+        if self.__areConnected( self._stack.top(), header ) == False:
+            if self.__checkForCycle( self._stack.top(), header ):
+                return header
+
+            self.__connect( self._stack.top(), header )
+
+        self._stack.push( header )
+
+        return header
+
+    def size( self ):
+        return len( self._nodes )
+
+    def get( self, object ):
+        if object not in self._nodes:
+            raise Exception( "object does not exist" )
+
+        return self._nodes[ object ]
+
+    def getNodes( self ):
+        return self._nodes.values()
+
+    def getRoot( self ):
+        return self._root
+
+    def deepPrint( self ):
+        self._root.deepPrint()
+
     def __areConnected( self, node1, node2 ):
         return node2 in node1.getChildren()
 
@@ -115,7 +161,7 @@ class Dag:
 
     def __getDepth( self ):
         return self._stack.size() - 1
-        
+
     def __getOrCreate( self, object ):
         if object not in self._nodes:
             self._nodes[ object ] = self.createNode( object )
@@ -143,46 +189,3 @@ class Dag:
                 return True
 
         return False
-
-    def createNode( self, value ):
-        return DagNode( value )
-        
-    def get( self, object ):
-        if object not in self._nodes:
-            raise Exception( "object does not exist" )
-
-        return self._nodes[ object ]
-
-    def deepPrint( self ):
-        self._root.deepPrint()
-
-    def getRoot( self ):
-        return self._root
-
-    def add( self, depth, object ):
-        assert depth > 0, 'depth cant be less equal zero'
-
-        if depth > self.__getDepth() + 1:
-            raise Exception( "Wrong depth, stack: ", self.__getDepth(), ", depth: ", depth )
-
-        depthDifference = self.__getDepth() - depth + 1
-
-        for i in range( 0, depthDifference ):
-            self._stack.pop()
-
-        assert self._stack.empty() == False, 'stack cant be empty'
-
-        header = self.__getOrCreate( object )
-
-        if self.__areConnected( self._stack.top(), header ) == False:
-            if self.__checkForCycle( self._stack.top(), header ):
-                return header
-
-            self.__connect( self._stack.top(), header )
-
-        self._stack.push( header )
-        
-        return header
-
-    def size( self ):
-        return len( self._nodes )

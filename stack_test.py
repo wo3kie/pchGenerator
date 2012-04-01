@@ -3,7 +3,7 @@ from stack import Stack
 import unittest
 
 #
-# Stack
+# TestStack
 #
 class TestStack(unittest.TestCase):
     def test_negative( self ):

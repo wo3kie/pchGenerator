@@ -6,7 +6,7 @@ from dag import\
     DagNode
 
 #
-# DfsNode
+# TestDfsNode
 #
 class TestDfsNode( unittest.TestCase ):
     def test_init( self ):
@@ -44,9 +44,8 @@ class TestDfsNode( unittest.TestCase ):
         self.assertRaises( Exception, node.setPostVisit, 10 )
         self.assertRaises( Exception, node.setPostVisit, 11 )
 
-
 #
-# DagNode
+# TestDagNode
 #
 class TestDagNode( unittest.TestCase ):
     def test_init( self ):
@@ -120,7 +119,7 @@ class TestDagNode( unittest.TestCase ):
 
         node3.addChild( node1 )
         self.assertFalse( node1.isLeaf() )
-        
+
     def test_setColorRecursively( self ):
         node1 = DagNode( 11 )
         node2 = DagNode( 22 )
@@ -139,7 +138,7 @@ class TestDagNode( unittest.TestCase ):
         self.assertEqual( node2.getColor(), DfsNode.Black )
         self.assertEqual( node3.getColor(), DfsNode.Black )
 #
-# DAG
+# DAGTest
 #
 class DAGTest( unittest.TestCase ):
     def test_add_raise( self ):
@@ -264,8 +263,6 @@ class DAGTest( unittest.TestCase ):
 
         self.assertEqual( dag.get( "filename_3_1" ).getChildren(), set() )
         self.assertEqual( dag.get( "filename_3_1" ).getParents(), set( [ filename_2_1, filename_2_2 ] ) )
-        
-        dag.deepPrint()
 
     def test_cycle( self ):
         dag = Dag()
