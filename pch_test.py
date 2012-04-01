@@ -5,7 +5,7 @@ from pch import\
     Stack
 
 #
-# parseLine
+# TestParseLine
 #
 class TestParseLine( unittest.TestCase ):
     def test_negative( self ):
@@ -19,7 +19,7 @@ class TestParseLine( unittest.TestCase ):
         self.assertEqual( parseLine( ".. directory" ), ( 2, "directory" ) )
         self.assertEqual( parseLine( "... path" ), ( 3, "path" ) )
 
-        
+
 #
 # main
 #

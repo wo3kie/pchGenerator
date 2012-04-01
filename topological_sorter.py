@@ -12,7 +12,7 @@ class TopologicalSorter:
 
         self.__calculatePrePostTime( dag.getRoot() )
 
-        self._sortedNodes = []
+        self._sortedNodes = [ dag.getRoot() ]
         for item in dag.getNodes():
             self._sortedNodes.append( item )
 

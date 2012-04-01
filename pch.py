@@ -6,6 +6,10 @@ from stack import Stack
 
 from headers_dag import HeaderNode, HeadersDag
 
+from topological_sorter import TopologicalSorter
+
+from recursive_filter import RecursiveFilter
+
 #
 # printHelp
 #
@@ -34,7 +38,33 @@ def parseLine( line ):
 
     return ( i, line[ i + 1 : len(line) ] )
 
+#
+# isApplicationHeader
+#
+def isApplicationHeader( node ):
+    return node.getData().startswith( "path/to/my/project" )
 
+#
+# isFirstLevelApplicationLevel
+#
+def isFirstLevelNonApplicationHeader( node ):
+    if isApplicationHeader( node ) == True:
+        return False
+
+    for parent in node.getParents():
+        if parent.isRoot():
+            return True
+
+        if isApplicationHeader:
+            return True
+
+    return False
+
+#
+# shouldBeInPCH
+#
+def shouldBeInPCH( node ):
+    return isFirstLevelNonApplicationHeader( node )
 
 #
 # runApplication
@@ -49,12 +79,17 @@ def runApplication():
     dag = HeadersDag()
 
     for line in file:
-        depth, file = parseLine( line )
+        depth, file = parseLine( line.strip() )
         dag.add( depth, file )
 
-    dag.recalculateDependenciesForOneFile()
+    dag.processOneFile()
 
+    tSorter = TopologicalSorter( dag )
 
+    rFilter = RecursiveFilter( tSorter, shouldBeInPCH )
+
+    for i in rFilter.getNodes():
+        print( i.getData() )
 #
 # main
 #

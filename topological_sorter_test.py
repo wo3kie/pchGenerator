@@ -7,7 +7,7 @@ from dag import\
     Dag
 
 #
-# DfsNode
+# TestSopologicalSorter
 #
 class TestSopologicalSorter( unittest.TestCase ):
     def test_1( self ):
@@ -23,7 +23,7 @@ class TestSopologicalSorter( unittest.TestCase ):
 
         tSorter = TopologicalSorter( dag )
 
-        self.assertEqual( [ i.getData() for i in tSorter.getNodes() ], [ "b", "c", "a" ] )
+        self.assertEqual( [ i.getData() for i in tSorter.getNodes() ], [ "root", "b", "c", "a" ] )
 
     def test_2( self ):
         dag = Dag()
@@ -40,7 +40,7 @@ class TestSopologicalSorter( unittest.TestCase ):
 
         tSorter = TopologicalSorter( dag )
 
-        self.assertEqual( [ i.getData() for i in tSorter.getNodes() ], [ "a", "b", "c" ] )
+        self.assertEqual( [ i.getData() for i in tSorter.getNodes() ], [ "root", "a", "b", "c" ] )
 #
 # main
 #

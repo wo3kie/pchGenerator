@@ -31,35 +31,34 @@ class HeaderNode( DagNode ):
 class HeadersDag( Dag ):
     def __init__( self ):
         Dag.__init__( self )
-        
+
     def createNode( self, object ):
         return HeaderNode( object )
-        
-    def __markRecursivelyAsIncluded( self, node ):
-        if node.isIncluded() == True:
-            return
-        
-        node.setIncluded( True )
-        
-        for child in node.getChildren():
-            __markRecursivelyAsIncluded( self, child )
-        
-    def __processOneFile( self, node ):
-        if node.isIncluded() == False:
-            return
-        
-        node.setCounter( node.getCounter() + 1 )
-        node.setIncluded( False )
-        
-        for child in node.getChildren():
-            self.__processOneFile( child )
-        
+
     def add( self, depth, header ):
         node = Dag.add( self, depth, header )
         self.__markRecursivelyAsIncluded( node )
         return node
-    
+
     def processOneFile( self ):
         for child in self.getRoot().getChildren():
             self.__processOneFile( child )
-        
+
+    def __markRecursivelyAsIncluded( self, node ):
+        if node.isIncluded() == True:
+            return
+
+        node.setIncluded( True )
+
+        for child in node.getChildren():
+            __markRecursivelyAsIncluded( self, child )
+
+    def __processOneFile( self, node ):
+        if node.isIncluded() == False:
+            return
+
+        node.setCounter( node.getCounter() + 1 )
+        node.setIncluded( False )
+
+        for child in node.getChildren():
+            self.__processOneFile( child )
