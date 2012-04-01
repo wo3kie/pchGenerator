@@ -4,7 +4,7 @@ import sys
 
 from stack import Stack
 
-from dag import DagNode, Dag
+from headers_dag import HeaderNode, HeadersDag
 
 #
 # printHelp
@@ -46,12 +46,14 @@ def runApplication():
 
     file = open( sys.argv[1], 'r' )
 
-    dag = Dag()
+    dag = HeadersDag()
 
     for line in file:
         depth, file = parseLine( line )
-
         dag.add( depth, file )
+
+    dag.recalculateDependenciesForOneFile()
+
 
 #
 # main

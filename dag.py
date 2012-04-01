@@ -41,7 +41,7 @@ class DfsNode:
 class DagNode( DfsNode ):
     def __init__( self, data ):
         DfsNode.__init__( self )
-    
+
         self._data = data
 
         self._parents = set()
@@ -79,11 +79,14 @@ class DagNode( DfsNode ):
 
     def isRoot( self ):
         return len( self.getParents() ) == 0
+        
+    def isLeaf( self ):
+        return len( self.getChildren() ) == 0
 
     def setColorRecursively( self, color ):
         if self.getColor() == color:
             return
-        
+
         self.setColor( color )
 
         for child in self.getChildren():
@@ -99,7 +102,7 @@ class Dag:
         self._nodes = {}
         self._stack = Stack()
 
-        self._stack.push( DagNode( "root" ) )
+        self._stack.push( self.createNode( "root" ) )
 
         self._root = self._stack.top()
 
@@ -112,10 +115,10 @@ class Dag:
 
     def __getDepth( self ):
         return self._stack.size() - 1
-
+        
     def __getOrCreate( self, object ):
         if object not in self._nodes:
-            self._nodes[ object ] = DagNode( object )
+            self._nodes[ object ] = self.createNode( object )
 
         return self._nodes[ object ]
 
@@ -141,6 +144,9 @@ class Dag:
 
         return False
 
+    def createNode( self, value ):
+        return DagNode( value )
+        
     def get( self, object ):
         if object not in self._nodes:
             raise Exception( "object does not exist" )
@@ -170,11 +176,13 @@ class Dag:
 
         if self.__areConnected( self._stack.top(), header ) == False:
             if self.__checkForCycle( self._stack.top(), header ):
-                return
+                return header
 
             self.__connect( self._stack.top(), header )
 
         self._stack.push( header )
+        
+        return header
 
     def size( self ):
         return len( self._nodes )

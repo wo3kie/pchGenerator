@@ -105,6 +105,22 @@ class TestDagNode( unittest.TestCase ):
         node1.addParent( node3 )
         self.assertFalse( node1.isRoot() )
 
+    def test_isLeaf( self ):
+        node1 = DagNode( 11 )
+        node2 = DagNode( 22 )
+        node3 = DagNode( 33 )
+
+        self.assertTrue( node1.isLeaf() )
+        self.assertTrue( node2.isLeaf() )
+        self.assertTrue( node3.isLeaf() )
+
+        node1.addChild( node2 )
+        self.assertFalse( node1.isLeaf() )
+        self.assertTrue( node2.isLeaf() )
+
+        node3.addChild( node1 )
+        self.assertFalse( node1.isLeaf() )
+        
     def test_setColorRecursively( self ):
         node1 = DagNode( 11 )
         node2 = DagNode( 22 )
