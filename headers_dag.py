@@ -30,10 +30,7 @@ class HeaderNode( DagNode ):
 #
 class HeadersDag( Dag ):
     def __init__( self ):
-        Dag.__init__( self )
-
-    def createNode( self, object ):
-        return HeaderNode( object )
+        Dag.__init__( self, HeaderNode )
 
     def add( self, depth, header ):
         node = Dag.add( self, depth, header )

@@ -98,16 +98,15 @@ from stack import Stack
 # Dag
 #
 class Dag:
-    def __init__( self ):
+    def __init__( self, type = DagNode ):
+        self._type = type
+
         self._nodes = {}
         self._stack = Stack()
 
-        self._stack.push( self.createNode( "root" ) )
+        self._stack.push( self._type( "root" ) )
 
         self._root = self._stack.top()
-
-    def createNode( self, value ):
-        return DagNode( value )
 
     def add( self, depth, object ):
         assert depth > 0, 'depth cant be less equal zero'
@@ -133,9 +132,6 @@ class Dag:
         self._stack.push( header )
 
         return header
-
-    def size( self ):
-        return len( self._nodes )
 
     def get( self, object ):
         if object not in self._nodes:
@@ -164,7 +160,7 @@ class Dag:
 
     def __getOrCreate( self, object ):
         if object not in self._nodes:
-            self._nodes[ object ] = self.createNode( object )
+            self._nodes[ object ] = self._type( object )
 
         return self._nodes[ object ]
 
