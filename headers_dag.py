@@ -48,7 +48,7 @@ class HeadersDag( Dag ):
         node.setIncluded( True )
 
         for child in node.getChildren():
-            __markRecursivelyAsIncluded( self, child )
+            self.__markRecursivelyAsIncluded( child )
 
     def __processOneFile( self, node ):
         if node.isIncluded() == False:

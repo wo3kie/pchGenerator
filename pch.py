@@ -10,12 +10,7 @@ from topological_sorter import TopologicalSorter
 
 from recursive_filter import RecursiveFilter
 
-#
-# printHelp
-#
-def printHelp():
-    print( "Usage: ", sys.argv[0] )
-    print( "Author: Lukasz Czerwinski (wo3kie@gmail.com)" )
+from processArgv import processArgv
 
 #
 # parseLine
@@ -70,19 +65,18 @@ def shouldBeInPCH( node ):
 # runApplication
 #
 def runApplication():
-    if len( sys.argv ) != 2:
-        printHelp()
-        exit( 1 )
-
-    file = open( sys.argv[1], 'r' )
+    options = processArgv()
 
     dag = HeadersDag()
 
-    for line in file:
-        depth, file = parseLine( line.strip() )
-        dag.add( depth, file )
+    for inputFileName in options.files:
+        inputFile = open( inputFileName )
+    
+        for line in inputFile:
+            depth, headerFileName = parseLine( line.strip() )
+            dag.add( depth, headerFileName )
 
-    dag.processOneFile()
+        dag.processOneFile()
 
     tSorter = TopologicalSorter( dag )
 
