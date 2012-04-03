@@ -20,7 +20,7 @@ def processArgv():
         default=50,
         nargs=1,
         type=int,
-        help='threshold in range 1-100 (default 50)'
+        help='threshold in range 1-100 (default 50) (%%)'
     )
 
     parser.add_argument(
@@ -57,4 +57,6 @@ def processArgv():
         help='source files to be processed'
     )
 
-    return parser.parse_args()
+    result = parser.parse_args()
+
+    return result
