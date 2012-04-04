@@ -25,7 +25,6 @@ def processArgv( argv ):
     parser.add_argument(
         '-c', '--compilation-options',
         default="",
-        nargs=1,
         help='options passed to compiler'
     )
 
@@ -46,7 +45,6 @@ def processArgv( argv ):
     parser.add_argument(
         '-o', '--output',
         default="precompiled.h",
-        nargs=1,
         help='enforce to put such files in PCHeader'
     )
 
