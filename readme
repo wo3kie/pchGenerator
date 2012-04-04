@@ -59,9 +59,14 @@ There are no bugs. There are "features".
 
 Maybe some day in the future I will do
 - add some support for Microsoft Visual C++ (not so far away)
-- add some support for CLans (rather far away)
+- add some support for CLang (rather far away)
 
 ################################################################################
 # GitHub...
 ################################################################################
 https://github.com/wo3kie/pchGenerator
+
+################################################################################
+# Project Homepage...
+################################################################################
+http://lukaszczerwinski.pl/pch_generator.en.html

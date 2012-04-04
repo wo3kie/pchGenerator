@@ -1,6 +1,6 @@
 import argparse
 
-def processArgv():
+def processArgv( argv ):
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description =
@@ -18,7 +18,6 @@ def processArgv():
     parser.add_argument(
         '-t', '--threshold',
         default=50,
-        nargs=1,
         type=int,
         help='threshold in range 1-100 (default 50) (%%)'
     )
@@ -57,6 +56,6 @@ def processArgv():
         help='source files to be processed'
     )
 
-    result = parser.parse_args()
+    result = parser.parse_args( argv )
 
     return result

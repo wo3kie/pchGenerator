@@ -5,9 +5,10 @@ import subprocess
 
 from stack import Stack
 from headers_dag import HeaderNode, HeadersDag
-from topological_sorter import TopologicalSorter
+from process_argv import processArgv
 from recursive_filter import RecursiveFilter
-from processArgv import processArgv
+from should_be_in_pch import ShouldBeInPCH
+from topological_sorter import TopologicalSorter
 
 #
 # parseLine
@@ -30,62 +31,6 @@ def parseLine( line ):
 
     return ( i, line[ i + 1 : len(line) ] )
 
-#
-# ShouldBeInPCH
-#
-class ShouldBeInPCH:
-    def __init__( self, options ):
-        self._options = options
-        
-        self._options.threshold = self.__calculateThreshold( options )
-
-    def __call__( self, node ):
-        isFileTypeOK = self.__isFirstLevelNonApplicationHeader( node )
-        isThresholdOK = self.__checkThreshold( node, self._options )
-        isExclusionOK = self.__checkExclusion( node, self._options )
-        
-        return isFileTypeOK and isThresholdOK and isExclusionOK
-
-    def __calculateThreshold( self, options ):
-        threshold = options.threshold[0]
-        numberOfFiles = len( options.files )
-        
-        return max( 1, numberOfFiles * threshold ) / 100
-        
-    def __isFirstLevelNonApplicationHeader( self, node ):
-        if self.__isApplicationHeader( node ) == True:
-            return False
-
-        for parent in node.getParents():
-            if parent.isRoot():
-                return True
-
-            if self.__isApplicationHeader( parent ):
-                return True
-
-        return False
-
-    def __isApplicationHeader( self, node ):
-        return node.getData().startswith( "path/to/my/project" )
-
-    def __checkThreshold( self, node, options ):
-        return node.getCounter() >= options.threshold
-        
-    def __checkExclusion( self, node, options ):
-        if self.__findAnyOf( node.getData(), options.exclude_except ):
-            return True
-        
-        if self.__findAnyOf( node.getData(), options.exclude ):
-            return False
-        
-        return True
-        
-    def __findAnyOf( self, value, patterns ):
-        for pattern in patterns:
-            if value.find( pattern ) != -1:
-                return True
-            
-        return False
 #
 # generateHeadersDag
 #
@@ -132,7 +77,7 @@ def generatePCH( rFilter, options ):
 # runApplication
 #
 def runApplication():
-    options = processArgv()
+    options = processArgv( sys.argv[1:] )
 
     dag = generateHeadersDag( options )
 
