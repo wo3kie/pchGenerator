@@ -9,7 +9,7 @@ import unittest
 #
 class TestShouldBeInPCH( unittest.TestCase ):
     def test_threshold_1( self ):
-        options = processArgv( [ "-t", "50", "test.cpp" ] )
+        options = processArgv( [ "-t", "50", "-p", "/home/project", "test.cpp" ] )
 
         inPCH = ShouldBeInPCH( options )
 
@@ -22,7 +22,7 @@ class TestShouldBeInPCH( unittest.TestCase ):
         self.assertEqual( inPCH( node ), True )
 
     def test_threshold_2( self ):
-        options = processArgv( [ "-t", "50", "test.cpp", "test.cpp" ] )
+        options = processArgv( [ "-t", "50", "-p", "/home/project", "test.cpp", "test.cpp" ] )
 
         inPCH = ShouldBeInPCH( options )
 
@@ -35,7 +35,7 @@ class TestShouldBeInPCH( unittest.TestCase ):
         self.assertEqual( inPCH( node ), True )
 
     def test_threshold_3( self ):
-        options = processArgv( [ "-t", "40", "test.cpp", "test.cpp" ] )
+        options = processArgv( [ "-t", "40", "-p", "/home/project", "test.cpp", "test.cpp" ] )
 
         inPCH = ShouldBeInPCH( options )
 
@@ -48,7 +48,7 @@ class TestShouldBeInPCH( unittest.TestCase ):
         self.assertEqual( inPCH( node ), True )
 
     def test_threshold_4( self ):
-        options = processArgv( [ "-t", "80", "test.cpp", "test.cpp", "test.cpp" ] )
+        options = processArgv( [ "-t", "80", "-p", "/home/project", "test.cpp", "test.cpp", "test.cpp" ] )
 
         inPCH = ShouldBeInPCH( options )
 
@@ -61,7 +61,7 @@ class TestShouldBeInPCH( unittest.TestCase ):
         self.assertEqual( inPCH( node ), False )
 
     def test_threshold_5( self ):
-        options = processArgv( [ "-t", "80", "test.cpp", "test.cpp", "test.cpp" ] )
+        options = processArgv( [ "-t", "80", "-p", "/home/project", "test.cpp", "test.cpp", "test.cpp" ] )
 
         inPCH = ShouldBeInPCH( options )
 
@@ -74,7 +74,7 @@ class TestShouldBeInPCH( unittest.TestCase ):
         self.assertEqual( inPCH( node ), True )
 
     def test_exclude( self ):
-        options = processArgv( [ "-e", "boost", "--", "test.cpp" ] )
+        options = processArgv( [ "-e", "boost", "-p", "/home/project", "--", "test.cpp" ] )
 
         inPCH = ShouldBeInPCH( options )
 
@@ -98,7 +98,7 @@ class TestShouldBeInPCH( unittest.TestCase ):
         self.assertEqual( inPCH( node3 ), True )
 
     def test_exclude_except( self ):
-        options = processArgv( [ "-e", "boost", "-x", "thread", "shared_ptr", "--", "test.cpp" ] )
+        options = processArgv( [ "-e", "boost", "-x", "thread", "shared_ptr", "-p", "/home/project", "--", "test.cpp" ] )
 
         inPCH = ShouldBeInPCH( options )
 
@@ -126,8 +126,34 @@ class TestShouldBeInPCH( unittest.TestCase ):
         
         self.assertEqual( inPCH( node4 ), True )
 
-    def test_application_header( self ):
-        options = processArgv( [ "test.cpp" ] )
+    def test_application_header_1( self ):
+        options = processArgv( [ "-p", "/home/project", "test.cpp" ] )
+
+        inPCH = ShouldBeInPCH( options )
+
+        parent = HeaderNode( "root" )
+
+        node = HeaderNode( "/home/main.hpp" )
+        node.addParent( parent )
+        node.setCounter( 1 )
+
+        self.assertEqual( inPCH( node ), True )
+
+    def test_application_header_2( self ):
+        options = processArgv( [ "-p", "/home/project", "test.cpp" ] )
+
+        inPCH = ShouldBeInPCH( options )
+
+        parent = HeaderNode( "root" )
+
+        node = HeaderNode( "/home/project/main.hpp" )
+        node.addParent( parent )
+        node.setCounter( 1 )
+
+        self.assertEqual( inPCH( node ), False )
+        
+    def test_application_header_3( self ):
+        options = processArgv( [ "-p", "test", "test.cpp" ] )
 
         inPCH = ShouldBeInPCH( options )
 

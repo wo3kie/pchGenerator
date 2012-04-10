@@ -10,8 +10,8 @@ def processArgv( argv ):
 
         epilog =
             "Examples:\n"
-            "-c \"-I. -I.. -DDEBUG\" -t 80 main.cpp impl.cpp\n"
-            "-e boost -x serialization thread -- main.cpp\n\n"
+            "-c \"-I. -I.. -DDEBUG\" -t 80 -p \"/home/test\" main.cpp impl.cpp\n"
+            "-e boost -x serialization thread -p \"/home/test\" -- main.cpp\n\n"
             "Author: Lukasz Czerwinski (wo3kie@gmail.com)"
     )
 
@@ -48,6 +48,12 @@ def processArgv( argv ):
         help='enforce to put such files in PCHeader'
     )
 
+    parser.add_argument(
+        '-p', '--project-path',
+        required=True,
+        help='path to your project'
+    )
+    
     parser.add_argument(
         'files',
         nargs='+',

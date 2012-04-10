@@ -36,7 +36,7 @@ class ShouldBeInPCH:
         return False
 
     def __isApplicationHeader( self, node ):
-        return node.getData().startswith( "path/to/my/project" )
+        return node.getData().find( self._options.project_path ) != -1
 
     def __checkThreshold( self, node ):
         return node.getCounter() >= self._options.threshold
