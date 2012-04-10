@@ -5,6 +5,12 @@
 The PCHGenerator is a tool for helping precompiled header generation. It scans all source files in project and selects the most often used headers for putting them into precompiled header.
 
 ################################################################################
+# Project Homepage...
+################################################################################
+
+http://lukaszczerwinski.pl/pch_generator.en.html
+
+################################################################################
 # License...
 ################################################################################
 
@@ -64,8 +70,3 @@ Maybe some day in the future I will do
 # GitHub...
 ################################################################################
 https://github.com/wo3kie/pchGenerator
-
-################################################################################
-# Project Homepage...
-################################################################################
-http://lukaszczerwinski.pl/pch_generator.en.html

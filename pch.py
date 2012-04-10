@@ -20,17 +20,24 @@ def generateHeadersDag( options, compilerFacade ):
     compilationOptions = compilerFacade.processCompOptions( options.compilation_options )
 
     for sourceFilename in options.files:
-        args = [ compilerFacade.name() ]
-        args.extend( compilationOptions.split() )
-        args.extend( [ sourceFilename ] )
+        print( "Processing... ", sourceFilename, ", found ", len( dag.getNodes() ), " till now." )
 
-        output = subprocess.check_output(
+        args = compilerFacade.name()
+        args = args + " " + compilationOptions
+        args = args + " " + sourceFilename
+
+        proc = subprocess.Popen(
             args,
-            stderr=subprocess.STDOUT,
+            shell = True,
+            stdin = subprocess.PIPE,
+            stdout = subprocess.PIPE,
+            stderr = subprocess.PIPE,
             universal_newlines=True
         )
 
-        for line in output.split( "\n" ):
+        stdout_output, stderr_output = proc.communicate()
+
+        for line in stderr_output.split( "\n" ):
             if len( line ) == 0:
                 continue
 
@@ -68,7 +75,7 @@ def generatePCH( rFilter, options ):
 def runApplication():
     options = processArgv( sys.argv[1:] )
 
-    dag = generateHeadersDag( options, GCCFacade )
+    dag = generateHeadersDag( options, GCCFacade() )
 
     tSorter = TopologicalSorter( dag )
 
