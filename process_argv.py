@@ -1,4 +1,5 @@
 import argparse
+import os
 
 def processArgv( argv ):
     parser = argparse.ArgumentParser(
@@ -10,8 +11,8 @@ def processArgv( argv ):
 
         epilog =
             "Examples:\n"
-            "-c \"-I. -I.. -DDEBUG\" -t 80 -p \"/home/test\" main.cpp impl.cpp\n"
-            "-e boost -x serialization thread -p \"/home/test\" -- main.cpp\n\n"
+            "-c \"-I. -I.. -DDEBUG\" -t 80 main.cpp impl.cpp\n"
+            "-e boost -x serialization thread -- main.cpp\n\n"
             "Author: Lukasz Czerwinski (wo3kie@gmail.com)"
     )
 
@@ -44,14 +45,14 @@ def processArgv( argv ):
 
     parser.add_argument(
         '-o', '--output',
-        default="precompiled.h",
-        help='enforce to put such files in PCHeader'
+        default='precompiled.h',
+        help='output filename (default precompiled.h)'
     )
 
     parser.add_argument(
         '-p', '--project-path',
-        required=True,
-        help='path to your project'
+        default='',
+        help='path to your project (default `cwd`)'
     )
     
     parser.add_argument(
@@ -61,5 +62,8 @@ def processArgv( argv ):
     )
 
     result = parser.parse_args( argv )
+
+    if result.project_path == '':
+        result.project_path = os.getcwd()
 
     return result
