@@ -5,8 +5,9 @@ from topological_sorter import\
 # RecursiveFilter
 #
 class RecursiveFilter:
-    def __init__( self, tSorter, predicate ):
+    def __init__( self, tSorter, predicate, options ):
         self._filteredNodes = []
+        self._options = options
 
         for item in tSorter.getNodes():
             self.__markedAsIncludedRecursively( item, False )
@@ -36,6 +37,9 @@ class RecursiveFilter:
             return
 
         node.setIncluded( value )
+
+        if self._options.watch_header == node.getData():
+            node.setFailingReason( "Header already included by other header" )
 
         for child in node.getChildren():
             self.__markedAsIncludedRecursively( child, True )

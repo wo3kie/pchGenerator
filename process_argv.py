@@ -17,6 +17,12 @@ def processArgv( argv ):
     )
 
     parser.add_argument(
+        '-w', '--watch-header',
+        default="",
+        help='print debug information for header'
+    )
+
+    parser.add_argument(
         '-t', '--threshold',
         default=50,
         type=int,
@@ -31,14 +37,14 @@ def processArgv( argv ):
 
     parser.add_argument(
         '-e', '--exclude',
-        default="",
+        default=[],
         nargs='*',
         help='do not put such files in PCHeader'
     )
 
     parser.add_argument(
         '-x', '--exclude-except',
-        default="",
+        default=[],
         nargs='*',
         help='enforce to put such files in PCHeader'
     )
@@ -54,7 +60,7 @@ def processArgv( argv ):
         default='',
         help='path to your project (default `cwd`)'
     )
-    
+
     parser.add_argument(
         'files',
         nargs='+',

@@ -12,6 +12,7 @@ class HeaderNode( DagNode ):
 
         self._included = False
         self._counter = 0
+        self._reason = "File included in precompiled header"
 
     def setIncluded( self, value ):
         self._included = value
@@ -24,6 +25,12 @@ class HeaderNode( DagNode ):
 
     def getCounter( self ):
         return self._counter
+
+    def setFailingReason( self, reason ):
+        self._reason = reason
+
+    def getFailingReason( self ):
+        return self._reason
 
 #
 # Header DAG
