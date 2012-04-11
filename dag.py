@@ -124,13 +124,10 @@ class Dag:
         header = self.__getOrCreate( object )
 
         if self.__areConnected( self._stack.top(), header ) == False:
-            if self.__checkForCycle( self._stack.top(), header ):
-                return header
-
-            self.__connect( self._stack.top(), header )
+            if self.__checkForCycle( self._stack.top(), header ) == False:
+                self.__connect( self._stack.top(), header )
 
         self._stack.push( header )
-
         return header
 
     def get( self, object ):

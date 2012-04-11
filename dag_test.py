@@ -284,6 +284,31 @@ class DAGTest( unittest.TestCase ):
         self.assertEqual( dag.get( "filename_2_1" ).getChildren(), set() )
         self.assertEqual( dag.get( "filename_2_1" ).getParents(), set( [ filename_1_1 ] ) )
 
+    def test_one_node_twice( self ):
+        dag = Dag()
+        
+        # filename_1_1
+        #   filename_2_1
+        #      filename_1_1
+        #         filename_3_1
+        
+        filename_1_1 = DagNode( "filename_1_1" )
+        filename_2_1 = DagNode( "filename_2_1" )
+        filename_3_1 = DagNode( "filename_3_1" )
+
+        dag.add( 1, "filename_1_1" )
+        dag.add( 2, "filename_2_1" )
+        dag.add( 3, "filename_1_1" )
+        dag.add( 4, "filename_3_1" )
+
+        self.assertEqual( dag.get( "filename_1_1" ).getChildren(), set( [ filename_2_1, filename_3_1 ] ) )
+        self.assertEqual( dag.get( "filename_1_1" ).getParents(), set( [ dag.getRoot() ] ) )
+
+        self.assertEqual( dag.get( "filename_2_1" ).getChildren(), set() )
+        self.assertEqual( dag.get( "filename_2_1" ).getParents(), set( [ filename_1_1 ] ) )
+
+        self.assertEqual( dag.get( "filename_3_1" ).getChildren(), set() )
+        self.assertEqual( dag.get( "filename_3_1" ).getParents(), set( [ filename_1_1 ] ) )        
 #
 # main
 #
