@@ -1,7 +1,6 @@
 # pchGenerator
 
 import sys
-import subprocess
 
 from gcc_facade import GCCFacade
 from headers_dag import HeaderNode, HeadersDag
@@ -22,27 +21,16 @@ def generateHeadersDag( options, compilerFacade ):
     for sourceFilename in options.files:
         print( "Processing... ", sourceFilename, ", found ", len( dag.getNodes() ), " till now." )
 
-        args = compilerFacade.name()
-        args = args + " " + compilationOptions
-        args = args + " " + sourceFilename
-
-        proc = subprocess.Popen(
-            args,
-            shell = True,
-            stdin = subprocess.PIPE,
-            stdout = subprocess.PIPE,
-            stderr = subprocess.PIPE,
-            universal_newlines=True
-        )
-
-        stdout_output, stderr_output = proc.communicate()
-
-        for line in stderr_output.split( "\n" ):
+        headers = compilerFacade.getHeaders( sourceFilename, compilationOptions )
+        
+        for line in headers.split( "\n" ):
             if len( line ) == 0:
                 continue
 
-            depth, filename = compilerFacade.parseLine( line )
-            dag.add( depth, filename )
+            try:
+                dag.add( * compilerFacade.parseLine( line ) )
+            except Exception as e:
+                print( "Warning: ", e )
 
         dag.processOneFile()
 
