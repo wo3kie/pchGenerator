@@ -1,7 +1,8 @@
 import unittest
 
 from dag import\
-    DagNode
+    DagNode,\
+    DfsNode
 
 from headers_dag import\
     HeaderNode,\
@@ -62,6 +63,10 @@ class TestDagHeaders( unittest.TestCase ):
         self.assertFalse( nodeB.isIncluded() )
         self.assertFalse( nodeC.isIncluded() )
 
+        self.assertEqual( nodeA.getColor(), DfsNode.White )
+        self.assertEqual( nodeB.getColor(), DfsNode.White )
+        self.assertEqual( nodeC.getColor(), DfsNode.White )
+
         self.assertTrue( nodeA.getCounter(), 1 )
         self.assertTrue( nodeB.getCounter(), 1 )
         self.assertTrue( nodeC.getCounter(), 1 )
@@ -83,6 +88,10 @@ class TestDagHeaders( unittest.TestCase ):
         self.assertFalse( nodeB.isIncluded() )
         self.assertFalse( nodeC.isIncluded() )
         self.assertFalse( nodeD.isIncluded() )
+
+        self.assertEqual( nodeA.getColor(), DfsNode.White )
+        self.assertEqual( nodeB.getColor(), DfsNode.White )
+        self.assertEqual( nodeC.getColor(), DfsNode.White )
 
         self.assertTrue( nodeA.getCounter(), 2 )
         self.assertTrue( nodeB.getCounter(), 2 )

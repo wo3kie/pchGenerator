@@ -20,6 +20,15 @@ class DfsNode:
     def getColor( self ):
         return self._color
 
+    def setColorRecursively( self, color ):
+        if self.getColor() == color:
+            return
+
+        self.setColor( color )
+
+        for child in self.getChildren():
+            child.setColorRecursively( color )
+
     def setPreVisit( self, time ):
         self._preVisit = time
 
@@ -71,15 +80,6 @@ class DagNode( DfsNode ):
     def isLeaf( self ):
         return len( self.getChildren() ) == 0
 
-    def setColorRecursively( self, color ):
-        if self.getColor() == color:
-            return
-
-        self.setColor( color )
-
-        for child in self.getChildren():
-            child.setColorRecursively( color )
-
     def deepPrint( self, indent = 0 ):
         print( indent * ' ', self._data )
 
@@ -100,13 +100,10 @@ from stack import Stack
 class Dag:
     def __init__( self, type = DagNode ):
         self._type = type
-
         self._nodes = {}
         self._stack = Stack()
-
-        self._stack.push( self._type( "root" ) )
-
-        self._root = self._stack.top()
+        self._root = self._type( "root" )
+        self._stack.push( self._root )
 
     def add( self, depth, object ):
         assert depth > 0, 'depth cant be less equal zero'

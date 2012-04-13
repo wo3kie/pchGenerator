@@ -7,22 +7,22 @@ from topological_sorter import\
 class RecursiveFilter:
     def __init__( self, tSorter, predicate, options ):
         self._filteredNodes = []
+        self._tSorter = tSorter
         self._options = options
 
-        for item in tSorter.getNodes():
-            self.__markedAsIncludedRecursively( item, False )
+        for node in self._tSorter.getNodes():
+            self.__filter( node, predicate )
 
-        for item in tSorter.getNodes():
-            self.__filter( item, predicate )
-
-    def __len__( self ):
-        return len( self._filteredNodes )
+        self.__cleanUp()
 
     def __filter( self, node, predicate ):
         if predicate( node ) == False:
             return
 
         if node.isIncluded():
+            if self._options.watch_header == node.getData():
+                node.setFailingReason( "Header already included by other header" )
+
             return
 
         self._filteredNodes.append( node )
@@ -30,20 +30,14 @@ class RecursiveFilter:
         node.setIncluded( True )
 
         for child in node.getChildren():
-            self.__markedAsIncludedRecursively( child, True )
+            child.setIncludedRecursively( True )
 
-    def __markedAsIncludedRecursively( self, node, value ):
-        if node.isIncluded() == value:
-            return
-
-        node.setIncluded( value )
-
-        if self._options.watch_header == node.getData():
-            node.setFailingReason( "Header already included by other header" )
-
-        for child in node.getChildren():
-            self.__markedAsIncludedRecursively( child, True )
+    def __cleanUp( self ):
+        for node in self._filteredNodes:
+            node.setIncludedRecursively( False )
 
     def getNodes( self ):
         return self._filteredNodes
 
+    def getRoot( self ):
+        return self._tSorter.getRoot()

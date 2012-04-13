@@ -1,6 +1,8 @@
 # pchGenerator
 
+import os
 import sys
+import tempfile
 
 from gcc_facade import GCCFacade
 from headers_dag import HeaderNode, HeadersDag
@@ -22,7 +24,7 @@ def generateHeadersDag( options, compilerFacade ):
         print( "Processing... ", sourceFilename, ", found ", len( dag.getNodes() ), " till now." )
 
         headers = compilerFacade.getHeaders( sourceFilename, compilationOptions )
-        
+
         for line in headers.split( "\n" ):
             if len( line ) == 0:
                 continue
@@ -35,6 +37,37 @@ def generateHeadersDag( options, compilerFacade ):
         dag.processOneFile()
 
     print( "All files processed, found", len( dag.getNodes() ), "headers." )
+
+    return dag
+
+#
+# updateHeadersDag
+#
+def updateHeadersDag( dag, rFilter, options, compilerFacade ):
+    compilationOptions = compilerFacade.processCompOptions( options.compilation_options )
+
+    for node in rFilter.getNodes():
+        print( "- Updating... ", node.getData() )
+
+        tempFileName = tempfile.gettempprefix()
+
+        outputFile = open( tempFileName, "w" )
+
+        outputFile.write( "#include \"" + node.getData() + "\"\n\nint main(){}\n\n")
+        outputFile.close()
+
+        headers = compilerFacade.getHeaders( tempFileName, compilationOptions )
+
+        for line in headers.split( "\n" ):
+            if len( line ) == 0:
+                continue
+
+            try:
+                dag.update( * compilerFacade.parseLine( line ) )
+            except Exception as e:
+                print( "Warning: ", e )
+
+    os.remove( tempFileName )
 
     return dag
 
@@ -72,7 +105,7 @@ def printWatchHeaderInfo( dag, options ):
     try:
         node = dag.get( options.watch_header )
 
-        print( "\nFailing reason..." )
+        print( "\nIncluded?..." )
         print( "  ", node.getFailingReason() )
 
         print( "\nHow many times header included..." )
@@ -103,6 +136,12 @@ def runApplication():
     tSorter = TopologicalSorter( dag )
 
     predicate = ShouldBeInPCH( options )
+
+    rFilter = RecursiveFilter( tSorter, predicate, options )
+
+    dag = updateHeadersDag( dag, rFilter, options, GCCFacade() )
+
+    tSorter = TopologicalSorter( dag )
 
     rFilter = RecursiveFilter( tSorter, predicate, options )
 

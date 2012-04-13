@@ -55,8 +55,11 @@ class GCCFacade:
 
     @staticmethod
     def __removeCompilationOption( options ):
-        return options.replace( "-c", "" )
+        options.replace( "-c", "" )
+        options.replace( "-fPIC", "" )
+        
+        return options
 
     @staticmethod
     def __runPreprocessingOnly( options ):
-        return "-E -H " + options
+        return "-x c++ -E -H " + options

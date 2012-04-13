@@ -20,6 +20,15 @@ class HeaderNode( DagNode ):
     def isIncluded( self ):
         return self._included
 
+    def setIncludedRecursively( self, value ):
+        if self.isIncluded() == value:
+            return
+
+        self.setIncluded( value )
+
+        for child in self.getChildren():
+            child.setIncludedRecursively( value )
+
     def setCounter( self, value ):
         self._counter = value
 
@@ -41,21 +50,15 @@ class HeadersDag( Dag ):
 
     def add( self, depth, header ):
         node = Dag.add( self, depth, header )
-        self.__markRecursivelyAsIncluded( node )
+        node.setIncludedRecursively( True )
         return node
+
+    def update( self, depth, header ):
+        return Dag.add( self, depth, header )
 
     def processOneFile( self ):
         for child in self.getRoot().getChildren():
             self.__processOneFile( child )
-
-    def __markRecursivelyAsIncluded( self, node ):
-        if node.isIncluded() == True:
-            return
-
-        node.setIncluded( True )
-
-        for child in node.getChildren():
-            self.__markRecursivelyAsIncluded( child )
 
     def __processOneFile( self, node ):
         if node.isIncluded() == False:

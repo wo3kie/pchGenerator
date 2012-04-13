@@ -17,7 +17,7 @@ class ShouldBeInPCH:
         if self._options.watch_header == node.getData():
             if isFileTypeOK == False: node.setFailingReason( "Included by other non application header" )
             if isThresholdOK == False: node.setFailingReason( "Threshold is too high for this header" )
-            if isExclusionOK == False: node.setFailingReason( "Header excplicitly excluded" )
+            if isExclusionOK == False: node.setFailingReason( "Header excluded by pattern" )
 
         return isFileTypeOK and isThresholdOK and isExclusionOK
 

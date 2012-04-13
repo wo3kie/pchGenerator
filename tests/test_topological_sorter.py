@@ -4,12 +4,13 @@ from topological_sorter import\
     TopologicalSorter
 
 from dag import\
-    Dag
+    Dag,\
+    DfsNode
 
 #
-# TestSopologicalSorter
+# TestTopologicalSorter
 #
-class TestSopologicalSorter( unittest.TestCase ):
+class TestTopologicalSorter( unittest.TestCase ):
     def test_1( self ):
         dag = Dag()
 
@@ -17,13 +18,17 @@ class TestSopologicalSorter( unittest.TestCase ):
         # . b
         # . c
 
-        dag.add( 1, "a" )
-        dag.add( 1, "b" )
-        dag.add( 1, "c" )
+        self._a = dag.add( 1, "a" )
+        self._b = dag.add( 1, "b" )
+        self._c = dag.add( 1, "c" )
 
         tSorter = TopologicalSorter( dag )
 
-        self.assertEqual( [ i.getData() for i in tSorter.getNodes() ], [ "root", "b", "c", "a" ] )
+        self.assertEqual( self._a.getColor(), DfsNode.White )
+        self.assertEqual( self._b.getColor(), DfsNode.White )
+        self.assertEqual( self._c.getColor(), DfsNode.White )
+
+        self.assertEqual( [ i.getData() for i in tSorter.getNodes() ], [ "b", "c", "a" ] )
 
     def test_2( self ):
         dag = Dag()
@@ -33,14 +38,18 @@ class TestSopologicalSorter( unittest.TestCase ):
         # .. b
         # ... c
 
-        dag.add( 1, "a" )
-        dag.add( 2, "c" )
-        dag.add( 2, "b" )
-        dag.add( 3, "c" )
+        self._a = dag.add( 1, "a" )
+        self._c = dag.add( 2, "c" )
+        self._b = dag.add( 2, "b" )
+        self._c = dag.add( 3, "c" )
 
         tSorter = TopologicalSorter( dag )
 
-        self.assertEqual( [ i.getData() for i in tSorter.getNodes() ], [ "root", "a", "b", "c" ] )
+        self.assertEqual( self._a.getColor(), DfsNode.White )
+        self.assertEqual( self._b.getColor(), DfsNode.White )
+        self.assertEqual( self._c.getColor(), DfsNode.White )
+
+        self.assertEqual( [ i.getData() for i in tSorter.getNodes() ], [ "a", "b", "c" ] )
 #
 # main
 #
