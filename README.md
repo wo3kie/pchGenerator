@@ -30,7 +30,7 @@ $ cat precompiled.h
 ```
 
 3. Compile your project with prcompiled.gch according to the g++ manual  
-In every source code at the beginning put '#include "precompiled.h"' line. For details click here [gnu g++](http://gcc.gnu.org/onlinedocs/gcc-4.1.2/gcc/Precompiled-Headers.html) or here [stackowerflow](http://stackoverflow.com/questions/58841/precompiled-headers-with-gcc).
+In every source code at the beginning put '#include "precompiled.h"' line. For details click here [gnu g++](http://gcc.gnu.org/onlinedocs/gcc-4.1.2/gcc/Precompiled-Headers.html) or here [stackoverflow](http://stackoverflow.com/questions/58841/precompiled-headers-with-gcc).
 
 ## Bugs...
 There are no bugs. There are "features".
