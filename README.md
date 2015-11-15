@@ -12,7 +12,7 @@ python >2.7
 
 ## How to use it?
 
-1. Run pch.py to generate precompiled.h file
+1. Run pch.py to generate precompiled.h file  
     ```
     $ pch.py -c="-I d:\boost" main.cpp test.cpp
 
@@ -26,12 +26,11 @@ python >2.7
     #include "d:/MinGW/bin/../ ... /include/c++/3.4.5/iostream"
     #include "d:/MinGW/bin/../ ... /include/c++/3.4.5/vector"
     ```
-2. Compile precompiled.h into precompiled.gch
+2. Compile precompiled.h into precompiled.gch  
     ```
     $ g++ -I d:\boost precompiled.h
     ```
-3. Compile your project with prcompiled.gch according to the g++ manual  
-In every source code at the beginning put '#include "precompiled.h"' line. For details click here [gnu g++](http://gcc.gnu.org/onlinedocs/gcc-4.1.2/gcc/Precompiled-Headers.html) or here [stackoverflow](http://stackoverflow.com/questions/58841/precompiled-headers-with-gcc).
+3. Compile your project with prcompiled.gch according to the g++ manual. For details check here [gnu g++](http://gcc.gnu.org/onlinedocs/gcc-4.1.2/gcc/Precompiled-Headers.html) or here [stackoverflow](http://stackoverflow.com/questions/58841/precompiled-headers-with-gcc).
 
 ## Todo
 Maybe some day in the future I will do
